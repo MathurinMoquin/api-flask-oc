@@ -1,0 +1,19 @@
+services:
+  flask_app2:
+    build: .
+    container_name: flask_backend2
+    group_add:
+      - "985"
+    ports:
+      - "5003:5003"
+    volumes:
+      - .:/app
+      -  /home/math/.log:/app/log/
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    restart: unless-stopped
+    networks:
+      - shared_net
+networks:
+  shared_net:
+    external: true
