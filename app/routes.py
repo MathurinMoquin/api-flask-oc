@@ -15,6 +15,8 @@ def get_poulaillers():
 
 @main.get("/frigos")
 def get_frigos():
+    x={}
+    print(x["frigos"])
     return rd.get_all_from_module(ModuleType.FRIGO)
 
 @main.get("/water_flows")
