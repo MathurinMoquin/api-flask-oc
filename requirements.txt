@@ -3,3 +3,4 @@ flask-cors
 requests
 pyserial
 gunicorn
+sentry_sdk

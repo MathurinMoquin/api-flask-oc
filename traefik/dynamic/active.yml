@@ -1,0 +1,13 @@
+http:
+  routers:
+    app:
+      rule: "Host(`localhost`)"
+      entryPoints:
+        - "web"
+      service: "flask_v1"
+
+  services:
+    flask_v1:
+      loadBalancer:
+        servers:
+          - url: "http://flask_app2_v1:5003"

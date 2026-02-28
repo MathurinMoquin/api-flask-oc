@@ -1,19 +1,38 @@
 services:
-  flask_app2:
-    build: .
-    container_name: flask_backend2
-    group_add:
-      - "985"
-    ports:
-      - "5003:5003"
+  flask_app2_v1:
+    image: mathmoq/flask_app2:v1
+    container_name: flask_backend2_v1
     volumes:
       - .:/app
-      -  /home/math/.log:/app/log/
+      - /home/math/.log:/app/log/
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     restart: unless-stopped
-    networks:
-      - shared_net
-networks:
-  shared_net:
-    external: true
+
+  flask_app2_v2:
+    image: mathmoq/flask_app2:v2
+    container_name: flask_backend2_v2
+    volumes:
+      - .:/app
+      - /home/math/.log:/app/log/
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    restart: unless-stopped
+
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"  # seulement pour test
+      - "--entrypoints.web.address=:80"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--log.level=INFO"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "./traefik/dynamic/blue.yml:/etc/traefik/dynamic/active.yml:ro"
+    depends_on:
+      - flask_app2_v1
+      - flask_app2_v2
